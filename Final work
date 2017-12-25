@@ -1,0 +1,116 @@
+def createDict():
+“““Defines acceptable characters for file encoding. Creates and returns dictionary with character as key and binary representation as value.”””
+    Dict = {}
+    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    upper = alphabet.upper()
+    symbols = [" ",".",",","?","!",'"',";",":","(",")","-",'\n']
+    for i in range(64):
+        if i < 26:
+            Dict[alphabet[i]] = bin(i)[2:].zfill(6)
+        elif i >= 26 and i < 52:
+            Dict[upper[i-len(alphabet)]] = bin(i)[2:].zfill(6)
+        elif i >= 52:
+            pos = i - 52
+            Dict[symbols[pos]] = bin(i)[2:].zfill(6)
+    return Dict
+
+
+def createDict2():
+“““Defines acceptable characters for textbox encoding. Creates and returns dictionary with character as key and binary representation as value.”””
+    Dict = {}
+    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    upper = alphabet.upper()
+    symbols = [" ",".",",","?","!",'"',";",":","(",")","-",'/']
+    for i in range(64):
+        if i < 26:
+            Dict[alphabet[i]] = bin(i)[2:].zfill(6)
+        elif i >= 26 and i < 52:
+            Dict[upper[i-len(alphabet)]] = bin(i)[2:].zfill(6)
+        elif i >= 52:
+            pos = i - 52
+            Dict[symbols[pos]] = bin(i)[2:].zfill(6)
+    return Dict
+
+def readDoc(txtfile):
+‘’’Opens text file for reading. Loops over lines in the file and adds them to outtext. Returns outtext.’’’
+    file = open(txtfile,'r')
+    outtext = ""
+    lines = file.readlines()
+    for line in lines:
+        outtext = outtext + line
+    #for line in file:
+     #   newline = line.strip("\n")
+      #  newline = newline.replace("\'","'")
+       # outtext = outtext+newline+" "
+    return outtext
+
+def eMain(key,plaintext):
+“““Encryption for user input text. Takes a key and text for encryption. Creates dictionary for text input. Lengthens key. Converts the key to a list of binary representations. Converts the text to a list of binary representations. Uses xor function to encrypt this list. Converts these representations to characters and returns encrypted text”””
+    binaryDict = createDict()
+    newKey = keyLengthen(key,plaintext)
+    binarylistKey = binaryConversion(newKey,binaryDict)
+    binarylistPlaintext = binaryConversion(plaintext,binaryDict)
+    binarylistCipher = xorfunc2(binarylistKey,binarylistPlaintext)
+    return textConversion(binarylistCipher,binaryDict)
+
+def eMain2(key,plaintext):
+“““Encryption for file input text. Takes a key and text for encryption. Creates dictionary for file input. Lengthens key. Converts the key to a list of binary representations. Converts the text to a list of binary representations. Uses xor function to encrypt this list. Converts these representations to characters and returns encrypted text”””
+    binaryDict = createDict2()
+    newKey = keyLengthen(key,plaintext)
+    binarylistKey = binaryConversion(newKey,binaryDict)
+    binarylistPlaintext = binaryConversion(plaintext,binaryDict)
+    binarylistCipher = xorfunc2(binarylistKey,binarylistPlaintext)
+    return textConversion(binarylistCipher,binaryDict)
+
+def dMain(key,ciphertext):
+“““Decryption for user input text. Takes a key and text for decryption. Creates dictionary for text input. Lengthens key. Converts the key to a list of binary representations. Converts the text to a list of binary representations. Uses xor function to decrypt this list. Converts these representations to characters and returns decrypted text.”””
+    binaryDict = createDict()
+    newKey = keyLengthen(key,ciphertext)
+    binarylistKey = binaryConversion(newKey,binaryDict)
+    binarylistCiphertext = binaryConversion(ciphertext,binaryDict)
+    binarylistDecrypted = xorfunc2(binarylistKey, binarylistCiphertext)
+    return textConversion(binarylistDecrypted,binaryDict)
+
+def dMain2(key,ciphertext):
+“““Decryption for file input text. Takes a key and text for decryption. Creates dictionary for file input. Lengthens key. Converts the key to a list of binary representations. Converts the text to a list of binary representations. Uses xor function to decrypt this list. Converts these representations to characters and returns decrypted text”””
+    binaryDict = createDict2()
+    newKey = keyLengthen(key,ciphertext)
+    binarylistKey = binaryConversion(newKey,binaryDict)
+    binarylistCiphertext = binaryConversion(ciphertext,binaryDict)
+    binarylistDecrypted = xorfunc2(binarylistKey, binarylistCiphertext)
+    return textConversion(binarylistDecrypted,binaryDict)
+
+def keyLengthen(key,plaintext):
+“““Takes the key inputted by the user and the string that is being encrypted or decrypted. Finds the amount of times that the key length fits into the text length. Multiplies the key by itself until it is the same length. Adds part of the key if it does not fit perfectly. Returns this new lengthed key. ”””
+    keyLen = len(key)
+    messageLen = len(plaintext)
+    repetition = messageLen // keyLen
+    remainder = messageLen % keyLen
+    newKey = key * repetition + key[0:remainder]
+    return newKey
+
+def binaryConversion(text,dict):
+“““Takes a string and a dictionary with keys as characters and values as binary representation. Loops over characters in text and finds binary representation. Adds each binary representation to a list. Returns this list.”””
+    outlist = []
+    for char in text:
+        if char in "1234567890'&":
+            outlist.append(char)
+        else:
+            binarynum = dict[char]
+            outlist.append(binarynum)
+    return outlist
+
+def textConversion(binarylist,dict):
+“““Takes a list of binary representations of letters and a dictionary with keys as characters and values as binary representation. Makes a dictionary that relates the binary and characters in the opposite way. Loops over the list of binary and converts to characters and adds that to outString. Returns outString.”””
+    outString = ""
+    newDict = {}
+    for (k,v) in dict.items():
+        newDict[v] = k
+    for binNum in binarylist:
+        if binNum in "1234567890'&":
+            outString = outString + binNum
+        else:
+            char = newDict[binNum]
+            outString = outString + char
+    return outString
+
