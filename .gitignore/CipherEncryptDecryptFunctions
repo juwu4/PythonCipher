@@ -8,15 +8,9 @@ def xorfunc2(binaryKey, binaryTxt):
       acc.append(binTemp)
   return acc
 
-key1= ["110100", "101101"]
-txt1= ["100010", "111110"]
-print(xorfunc2(key1, txt1))
 
 def xorfunc(binaryKey, binaryTxt):
    '''This is the xor function, should be applicable for both encrypt and decrypt on number inputs'''
    y = int(binaryKey,2) ^ int(binaryTxt,2)
-   print(bin(y)[2:].zfill(len(binaryKey)))
-
-Key = "110011111011001101101"
-Txt = "110010111011001110111"
-xorfunc(Key, Txt)
+   final=(bin(y)[2:].zfill(len(binaryKey)))
+   return final
