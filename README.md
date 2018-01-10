@@ -21,3 +21,8 @@ Next, insert the key used to encrypt the message.
 
 Click Finish to decrypt, which will either generate decrypted text in a label (if the text is inserted), or a file with decrypted text (if the file is uploaded). 
 
+# Potential Changes
+A useful future addition may be to enable the labels generated in the window susceptible to copy-paste, making operation of the program easier. 
+
+P.S. 
+First github repository, so formatting issues are a bit new to me. 
