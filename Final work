@@ -1,3 +1,14 @@
+
+def xorfunc2(binaryKey, binaryTxt):
+  '''This is the xor function, should be applicable for both encrypt and decrypt on list inputs'''
+  binLen=len(binaryKey)
+  acc=[]
+  for i in range(binLen):
+      y = int(binaryKey[i],2) ^ int(binaryTxt[i],2)
+      binTemp=(bin(y)[2:].zfill(binLen))
+      acc.append(binTemp)
+  return acc
+  
 def createDict():
 “““Defines acceptable characters for file encoding. Creates and returns dictionary with character as key and binary representation as value.”””
     Dict = {}
